@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN" data-target="__TUNNEL_URL__">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>百泰克企业社区</title>
+<style>
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    background:#f5f9fb;color:#22303a;
+    display:flex;align-items:center;justify-content:center;padding:24px;
+  }
+  .card{
+    width:100%;max-width:420px;background:#fff;border:1px solid #e4edf2;border-radius:16px;
+    padding:36px 28px 30px;text-align:center;box-shadow:0 8px 30px rgba(29,186,209,.10);
+  }
+  .bar{width:56px;height:6px;border-radius:99px;margin:0 auto 22px;background:linear-gradient(90deg,#1dbad1,#229cef)}
+  .spin{width:32px;height:32px;margin:0 auto 16px;border-radius:50%;
+        border:3px solid #e4edf2;border-top-color:#229cef;animation:sp .9s linear infinite}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  .ttl{font-size:19px;font-weight:700;letter-spacing:.5px}
+  .sub{margin-top:8px;font-size:13.5px;color:#6b7d88;line-height:1.7}
+  .btn{display:inline-block;margin:22px auto 0;padding:13px 28px;border:0;border-radius:11px;
+       background:linear-gradient(90deg,#1dbad1,#229cef);color:#fff;font-size:15px;font-weight:600;
+       text-decoration:none;box-shadow:0 6px 16px rgba(35,158,239,.28);word-break:break-all}
+  .btn:active{transform:translateY(1px)}
+  .tip{margin-top:16px;font-size:12px;color:#9aa9b2;line-height:1.7}
+  .err{color:#c0392b}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="bar"></div>
+  <div class="spin" id="sp"></div>
+  <div class="ttl">百泰克企业社区</div>
+  <div class="sub" id="sub">正在跳转至站点最新地址…</div>
+  <a class="btn" id="go" href="#">立即前往</a>
+  <div class="tip" id="tip"></div>
+</div>
+<script>
+(function () {
+  var doc = document.documentElement;
+  var host = (doc.getAttribute('data-target') || '').trim().replace(/\/+$/, '');
+  var btn = document.getElementById('go');
+  var sub = document.getElementById('sub');
+  var tip = document.getElementById('tip');
+  var sp  = document.getElementById('sp');
+
+  if (!/^https?:\/\//i.test(host)) {
+    sp.style.display = 'none';
+    btn.style.display = 'none';
+    sub.textContent = '暂未同步到最新地址。';
+    sub.className = 'sub err';
+    tip.textContent = '请在本机运行「启动公网穿透」，同步脚本会自动把地址推到这里。';
+    return;
+  }
+
+  var q = new URLSearchParams(location.search);
+  var p = q.get('p') || '';
+  var target = host + p;
+
+  btn.href = target;
+  tip.textContent = '最新地址：' + host;
+
+  setTimeout(function () { location.replace(target); }, 350);
+  setTimeout(function () { if (location.href !== target) { location.href = target; } }, 6000);
+})();
+</script>
+</body>
+</html>
